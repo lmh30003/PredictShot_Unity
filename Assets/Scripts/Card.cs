@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Card : MonoBehaviour {
-
+    public string cardName;
 	// Use this for initialization
 	void Start () {
 		

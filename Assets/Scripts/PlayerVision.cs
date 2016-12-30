@@ -19,7 +19,9 @@ public class PlayerVision : MonoBehaviour {
 	
 	// Update is called once per frame
 	public void updateMap () {
-        foreach(GameObject toDestroy in mask)
+        return;
+        /*
+        foreach (GameObject toDestroy in mask)
         {
             Destroy(toDestroy);
         }
@@ -34,6 +36,7 @@ public class PlayerVision : MonoBehaviour {
             mask.Add(g);
             count++;
         }
+        */
 	}
     public List<bool> getVisibleData()
     {
@@ -60,8 +63,8 @@ public class PlayerVision : MonoBehaviour {
         else if (Math.Abs(lookDirection - sightAngle / 2) < Math.PI && Math.Abs(lookDirection + sightAngle / 2) > Math.PI) min_testX = -(sightRange + 1);
 
         if (lookDirection - sightAngle / 2 < Math.PI / 2 && lookDirection + sightAngle / 2 > Math.PI / 2) max_testY = sightRange + 1;
-        else if (lookDirection - sightAngle / 2 < Math.PI * 3 / 2 && lookDirection + sightAngle / 2 > Math.PI * 3 / 2) min_testY = -(sightRange + 1);
-
+        else if (lookDirection - sightAngle / 2 < -Math.PI / 2 && lookDirection + sightAngle / 2 > -Math.PI / 2) min_testY = -(sightRange + 1);
+        print(string.Format("{0},{1},{2},{3}", min_testX, max_testX, min_testY, max_testY));
 
 
         double testAngle;
@@ -71,10 +74,10 @@ public class PlayerVision : MonoBehaviour {
         Console.WriteLine(max_testX);
         Console.WriteLine(min_testX);
         //장애물 존재 check
-        for (double testX = startPoint.x + min_testX; testX < startPoint.x + max_testX; testX++)
+        for (double testX = startPoint.x + min_testX; testX < startPoint.x + max_testX; testX+=1)
         {
             if (testX < 0 || testX >= width) continue;
-            for (double testY = startPoint.y + (int)min_testY; testY < startPoint.y + max_testY; testY++)
+            for (double testY = startPoint.y + (int)min_testY; testY < startPoint.y + max_testY; testY+=1)
             {
                 if (testY < 0 || testY >= height) continue;
                 isInsideAngle = false;
@@ -91,34 +94,37 @@ public class PlayerVision : MonoBehaviour {
                 {
                     //obstacles.Add(new Vector2(testX, testY));
                 }
-
             }
         }
-        for (double testX = startPoint.x + min_testX; testX < startPoint.x + max_testX; testX++)
+
+
+        
+
+        for (double testX = startPoint.x + min_testX; testX < startPoint.x + max_testX; testX += 1)
         {
             if (testX < 0 || testX >= width) continue;
-            for (double testY = startPoint.y + min_testY; testY < startPoint.y + max_testY; testY++)
+            for (double testY = startPoint.y + min_testY; testY < startPoint.y + max_testY; testY+=1)
             {
                 if (testY < 0 || testY >= height) continue;
                 //testX, testY : result에 저장될 것들
-                if (testX - startPoint.x == 0) testAngle = testY - startPoint.y > 0 ? Math.PI / 2 : -Math.PI / 2;
-                else testAngle = Math.Atan((double)(testY - startPoint.y) / (testX - startPoint.x)); // 각도 check
+                if (testX - startPoint.x == 0) testAngle = testY > startPoint.y ? Math.PI / 2 : -Math.PI / 2;
+                else testAngle = Math.Atan((testY - startPoint.y) / (testX - startPoint.x)); // 각도 check
                 isInsideAngle = (lookDirection - sightAngle / 2 <= testAngle && testAngle <= lookDirection + sightAngle / 2)
                                 || (lookDirection - sightAngle / 2 + Math.PI <= testAngle && testAngle <= Math.PI / 2)
                                 || (lookDirection + sightAngle / 2 - Math.PI >= testAngle);
                 if (!isInsideAngle) continue;
                 isInsideRange = isInsideSightRange(new Vector2((float)testX, (float)testY), startPoint, sightRange);
-                if (!isInsideRange) continue;
+                //if (!isInsideRange) continue;
                 isShadedByObstacle = false;
                 foreach (Vector2 obs in obstacles)
                 {
                     if (!isShadedByObstacle && isInsideLineAngle(startPoint, new Vector2((float)testX, (float)testY), Math.Tanh((testY - startPoint.y) / (testX - startPoint.x))))
                         isShadedByObstacle = true;
                 }
-                result[pointToInt(testX, testY)] = isInsideAngle && !isShadedByObstacle;
-                //result[pointToInt(testX, testY)] = true;
+                result[pointToInt(testX, testY)] = true;//isInsideAngle && !isShadedByObstacle;
             }
         }
+        result[pointToInt(startPoint)] = true;
         return result;
     }
     private bool isInsideObsAngle(Vector2 startPoint, Vector2 obstacle, Vector2 toCheck)

@@ -7,6 +7,7 @@ public class MainRoutine : MonoBehaviour {
     public PlayerData mainPlayer;
     public PlayerData player1, player2, player3;
     public List<PlayerData> players;
+    private UIScript handUI;
     public Map map;
     const float TurnTime = 1.5f;
     const float RestTime = 10.0f;
@@ -27,8 +28,16 @@ public class MainRoutine : MonoBehaviour {
         players.Add(player2);
         players.Add(player3);
         StartCoroutine(singlePlayMainRoutine());
+        handUI = GameObject.Find("UIScripts").GetComponent<UIScript>();
     }
-
+    private void Update()
+    {
+        //command here
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            handUI.drawHand = !handUI.drawHand;
+        }
+    }
     bool isGameEnded()
     {
         int liveCount = 0;

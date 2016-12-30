@@ -102,7 +102,7 @@ public class Map : MonoBehaviour {
         tileList.Add(tile7);
         foreach (GameMapTile gm in mapTileData)
         {
-            Instantiate(tileList[gm.height], new Vector3(gm.xloc/2.0f, gm.yloc/2.0f, 0f), Quaternion.identity);
+            Instantiate(tileList[gm.height], new Vector3(gm.xloc, gm.yloc, 0f), Quaternion.identity);
         }
 
 	}

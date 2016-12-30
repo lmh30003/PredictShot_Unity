@@ -13,9 +13,9 @@ public class CameraMove : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (Input.GetMouseButton(0) && Input.GetMouseButton(1))
+        if (Input.GetMouseButton(2))
         {
-            gameObject.transform.Translate(new Vector3(-Input.GetAxis("Mouse X")*0.5f, -Input.GetAxis("Mouse Y")*0.5f));
+            gameObject.transform.Translate(new Vector3(-Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y")));
         }
         if(Input.GetAxis("Mouse ScrollWheel") > 0 && Camera.main.orthographicSize > 0)
         {
